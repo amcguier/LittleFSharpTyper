@@ -1,0 +1,23 @@
+﻿%{
+
+
+%}
+
+%start start
+%token <string> ATOM
+%token EOF
+%type <string option> start 
+%%
+
+start: prog { $1 }
+
+prog:
+  | value EOF { Some $1 }
+  | EOF { None } 
+
+
+
+value:
+  | ATOM { $1 }
+  
+

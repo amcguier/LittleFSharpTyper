@@ -1,0 +1,20 @@
+{
+
+open System
+open FSharp.Text.Lexing
+
+
+let lexme = LexBuffer<_>.LexemeString
+exception SyntaxError of string
+
+}
+
+let atomStart = '`'
+
+let atomString = ['A'-'z' '-' 'A'-'ω' ]+
+
+
+rule tokenStream = parse
+  | atomStart atomString { Parser.ATOM ((lexme lexbuf).[1..]) }
+  | eof { Parser.EOF }
+  | _ {raise (SyntaxError ("Invalid string provided"))}
