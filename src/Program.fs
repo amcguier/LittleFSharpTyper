@@ -10,18 +10,21 @@ let testParser str =
     Parser.start Lexer.tokenStream lexbuf |> Some
     
   with
-    | Lexer.SyntaxError(str)  -> printfn "%A" str
-                                 None
+    | exn  -> printfn "%A %A" (exn.GetType()) exn
+              None
 
 
   
 
 [<EntryPoint>]
 let main argv =
-  let valid = testParser "(`valid-toβ)" |> Option.get
-  printfn "%A" valid
-  printfn "%A" (valid.Length)
-  printfn "%A" (testParser "`valid-tokenβ")
-  
-  printfn "%A" (testParser "nonsense")
+  let testProgram =
+    """(cons `Atomy (`Atomx))"""
+  printfn "%A" (testParser testProgram)
+  printfn "%A" (testParser "(`valid-tokenβ)")
+
+  try
+    printfn "%A" (testParser "nonsense")
+  with
+    |  exn -> printfn "%A" exn
   0 // return an integer exit code

@@ -4,11 +4,17 @@ type token =
   | EOF
   | L_PAREN
   | R_PAREN
+  | CONS
+  | CAR
+  | CDR
   | ATOM of (string)
 type tokenId = 
     | TOKEN_EOF
     | TOKEN_L_PAREN
     | TOKEN_R_PAREN
+    | TOKEN_CONS
+    | TOKEN_CAR
+    | TOKEN_CDR
     | TOKEN_ATOM
     | TOKEN_end_of_input
     | TOKEN_error
@@ -16,8 +22,9 @@ type nonTerminalId =
     | NONTERM__startstart
     | NONTERM_start
     | NONTERM_value
-    | NONTERM_exprn
+    | NONTERM_both
     | NONTERM_stmnt
+    | NONTERM_prog
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int
 

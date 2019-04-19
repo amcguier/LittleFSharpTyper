@@ -14,11 +14,15 @@ exception SyntaxError of string
 
 }
 
+
+let whitespace = [' ' '\t']
 let newline = ('\n' | '\r' '\n')
 
 let atomStart = '`'
 
 let atomString = ['A'-'z' '-' 'A'-'ω' ]+
+
+
 
 
 rule tokenStream = parse
@@ -27,4 +31,8 @@ rule tokenStream = parse
   | atomStart atomString { Parser.ATOM ((lexme lexbuf).[1..]) }
   | newline { newline lexbuf; tokenStream lexbuf } 
   | eof { Parser.EOF }
+  | "car" whitespace* { Parser.CAR }
+  | "cons" whitespace* { Parser.CONS }
+  | "cdr" whitespace* { Parser.CDR }
+  | whitespace { tokenStream lexbuf }
   | _ {raise (SyntaxError ("Invalid string provided"))}

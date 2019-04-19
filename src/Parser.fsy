@@ -4,25 +4,32 @@
 
 %start start
 %token <string> ATOM
-%token EOF L_PAREN R_PAREN
+%token EOF L_PAREN R_PAREN CONS CAR CDR
 %type <AST.Prog> start 
 %%
 
-start: stmnt { $1 }
+start: prog { $1 }
 
 
 
 value:
   | ATOM { Atom($1) }
 
-exprn:
-  | L_PAREN value R_PAREN { $2 } 
 
+both:
+  | stmnt { $1 }
+  | value { $1 }
 
 stmnt:
-  | exprn stmnt { List.rev ($1::$2) }
-  | EOF { [] }
+  | L_PAREN value R_PAREN { $2 }
+  | L_PAREN CONS both both R_PAREN { Cons($3, $4) }
+  | L_PAREN CAR both R_PAREN { Car($3) }
+  | L_PAREN CDR both R_PAREN { Cdr($3) }
 
+
+prog:
+  | stmnt prog { List.rev ($1::$2) }
+  | EOF { [] }
 
   
 
