@@ -1,23 +1,28 @@
 ﻿%{
-
-
+  open AST
 %}
 
 %start start
 %token <string> ATOM
-%token EOF
-%type <string option> start 
+%token EOF L_PAREN R_PAREN
+%type <AST.Prog> start 
 %%
 
-start: prog { $1 }
-
-prog:
-  | value EOF { Some $1 }
-  | EOF { None } 
+start: stmnt { $1 }
 
 
 
 value:
-  | ATOM { $1 }
+  | ATOM { Atom($1) }
+
+exprn:
+  | L_PAREN value R_PAREN { $2 } 
+
+
+stmnt:
+  | exprn stmnt { List.rev ($1::$2) }
+  | EOF { [] }
+
+
   
 

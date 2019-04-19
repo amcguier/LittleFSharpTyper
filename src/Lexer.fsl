@@ -5,9 +5,16 @@ open FSharp.Text.Lexing
 
 
 let lexme = LexBuffer<_>.LexemeString
+
+let newline (lexbuf: LexBuffer<_>) = 
+  lexbuf.StartPos <- lexbuf.StartPos.NextLine
+
+  
 exception SyntaxError of string
 
 }
+
+let newline = ('\n' | '\r' '\n')
 
 let atomStart = '`'
 
@@ -15,6 +22,9 @@ let atomString = ['A'-'z' '-' 'A'-'ω' ]+
 
 
 rule tokenStream = parse
+  | '(' { Parser.L_PAREN }
+  | ')' { Parser.R_PAREN }
   | atomStart atomString { Parser.ATOM ((lexme lexbuf).[1..]) }
+  | newline { newline lexbuf; tokenStream lexbuf } 
   | eof { Parser.EOF }
   | _ {raise (SyntaxError ("Invalid string provided"))}

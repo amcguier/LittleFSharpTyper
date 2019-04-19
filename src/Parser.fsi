@@ -2,17 +2,22 @@
 module Parser
 type token = 
   | EOF
+  | L_PAREN
+  | R_PAREN
   | ATOM of (string)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_L_PAREN
+    | TOKEN_R_PAREN
     | TOKEN_ATOM
     | TOKEN_end_of_input
     | TOKEN_error
 type nonTerminalId = 
     | NONTERM__startstart
     | NONTERM_start
-    | NONTERM_prog
     | NONTERM_value
+    | NONTERM_exprn
+    | NONTERM_stmnt
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int
 
@@ -24,4 +29,4 @@ val prodIdxToNonTerminal: int -> nonTerminalId
 
 /// This function gets the name of a token as a string
 val token_to_string: token -> string
-val start : (FSharp.Text.Lexing.LexBuffer<'cty> -> token) -> FSharp.Text.Lexing.LexBuffer<'cty> -> (string option) 
+val start : (FSharp.Text.Lexing.LexBuffer<'cty> -> token) -> FSharp.Text.Lexing.LexBuffer<'cty> -> (AST.Prog) 
