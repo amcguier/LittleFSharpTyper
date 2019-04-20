@@ -19,8 +19,10 @@ let whitespace = [' ' '\t']
 let newline = ('\n' | '\r' '\n')
 
 let atomStart = '`'
-
 let atomString = ['A'-'z' '-' 'A'-'ω' ]+
+
+let natural = ['0' - '9']+
+
 
 
 
@@ -28,6 +30,8 @@ let atomString = ['A'-'z' '-' 'A'-'ω' ]+
 rule tokenStream = parse
   | '(' { Parser.L_PAREN }
   | ')' { Parser.R_PAREN }
+  | '+' { Parser.PLUS }
+  | "add1" { Parser.ADD1 }
   | atomStart atomString { Parser.ATOM ((lexme lexbuf).[1..]) }
   | newline { newline lexbuf; tokenStream lexbuf } 
   | eof { Parser.EOF }
@@ -35,4 +39,6 @@ rule tokenStream = parse
   | "cons" whitespace* { Parser.CONS }
   | "cdr" whitespace* { Parser.CDR }
   | whitespace { tokenStream lexbuf }
+  | "zero" { Parser.NAT (0) }
+  | natural { Parser.NAT (lexme lexbuf |> int) }
   | _ {raise (SyntaxError ("Invalid string provided"))}

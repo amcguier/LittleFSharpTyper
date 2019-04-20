@@ -14,17 +14,30 @@ let testParser str =
               None
 
 
+
   
+
+
+
+
+let programs =
+  [ "(cons `Atomy (`Atomx))"
+    "nonsense"
+    "(19)"
+    "(zero)"
+    "(0)"
+    "(+ 0 17)"
+    "(add1 zero)"]
+
+
+
+
 
 [<EntryPoint>]
 let main argv =
-  let testProgram =
-    """(cons `Atomy (`Atomx))"""
-  printfn "%A" (testParser testProgram)
-  printfn "%A" (testParser "(`valid-tokenβ)")
+  programs
+  |> List.map (fun x -> (x,testParser x))
+  |> List.iter (fun ((prog, ast)) -> printfn "Program:\n\t%s\n Produced:\n\t%A" prog ast)
 
-  try
-    printfn "%A" (testParser "nonsense")
-  with
-    |  exn -> printfn "%A" exn
-  0 // return an integer exit code
+  0
+  

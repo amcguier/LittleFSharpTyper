@@ -4,7 +4,8 @@
 
 %start start
 %token <string> ATOM
-%token EOF L_PAREN R_PAREN CONS CAR CDR
+%token <int> NAT
+%token EOF L_PAREN R_PAREN CONS CAR CDR PLUS ADD1
 %type <AST.Prog> start 
 %%
 
@@ -14,7 +15,7 @@ start: prog { $1 }
 
 value:
   | ATOM { Atom($1) }
-
+  | NAT { Natural($1) } 
 
 both:
   | stmnt { $1 }
@@ -25,6 +26,8 @@ stmnt:
   | L_PAREN CONS both both R_PAREN { Cons($3, $4) }
   | L_PAREN CAR both R_PAREN { Car($3) }
   | L_PAREN CDR both R_PAREN { Cdr($3) }
+  | L_PAREN PLUS both both R_PAREN { Plus( $3, $4) }
+  | L_PAREN ADD1 both R_PAREN { Add1($3) }
 
 
 prog:

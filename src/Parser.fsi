@@ -7,6 +7,9 @@ type token =
   | CONS
   | CAR
   | CDR
+  | PLUS
+  | ADD1
+  | NAT of (int)
   | ATOM of (string)
 type tokenId = 
     | TOKEN_EOF
@@ -15,6 +18,9 @@ type tokenId =
     | TOKEN_CONS
     | TOKEN_CAR
     | TOKEN_CDR
+    | TOKEN_PLUS
+    | TOKEN_ADD1
+    | TOKEN_NAT
     | TOKEN_ATOM
     | TOKEN_end_of_input
     | TOKEN_error
