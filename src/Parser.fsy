@@ -21,13 +21,19 @@ both:
   | stmnt { $1 }
   | value { $1 }
 
+
+stmntbody:
+  | value {$1}
+  | CONS both both { Cons($2, $3) }
+  | CAR both  { Car($2) }
+  | CDR both  { Cdr($2) }
+  | PLUS both both  { Plus( $2, $3) }
+  | ADD1 both  { Add1($2) }
+  
+
 stmnt:
-  | L_PAREN value R_PAREN { $2 }
-  | L_PAREN CONS both both R_PAREN { Cons($3, $4) }
-  | L_PAREN CAR both R_PAREN { Car($3) }
-  | L_PAREN CDR both R_PAREN { Cdr($3) }
-  | L_PAREN PLUS both both R_PAREN { Plus( $3, $4) }
-  | L_PAREN ADD1 both R_PAREN { Add1($3) }
+  | L_PAREN stmntbody R_PAREN { $2 }
+
 
 
 prog:
