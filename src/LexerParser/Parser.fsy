@@ -3,9 +3,10 @@
 %}
 
 %start start
+%token <string> NAME
 %token <string> ATOM
-%token <int> NAT
-%token EOF L_PAREN R_PAREN CONS CAR CDR PLUS ADD1
+%token EOF L_PAREN R_PAREN CONS CAR CDR PLUS ADD1 CLAIM ZERO DEFINE
+%token T_NAT T_ATOM T_PAIR
 %type <AST.Prog> start 
 %%
 
@@ -13,9 +14,15 @@ start: prog { $1 }
 
 
 
+typ:
+ | T_NAT { Type.Nat }
+ | T_ATOM { Type.Atom }
+ | T_PAIR typ typ { Type.Pair($2,$3) }
+ 
+
 value:
   | ATOM { Atom($1) }
-  | NAT { Natural($1) } 
+  | ZERO { Zero } 
 
 both:
   | stmnt { $1 }
@@ -29,6 +36,8 @@ stmntbody:
   | CDR both  { Cdr($2) }
   | PLUS both both  { Plus( $2, $3) }
   | ADD1 both  { Add1($2) }
+  | CLAIM NAME typ { Claim ($2,$3) }
+  | DEFINE NAME both { Define ( $2, $3) }
   
 
 stmnt:

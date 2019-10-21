@@ -1,0 +1,53 @@
+{
+
+open System
+open FSharp.Text.Lexing
+
+
+let lexme = LexBuffer<_>.LexemeString
+
+let newline (lexbuf: LexBuffer<_>) = 
+  lexbuf.StartPos <- lexbuf.StartPos.NextLine
+
+  
+exception SyntaxError of string
+
+}
+
+
+let whitespace = [' ' '\t']
+let newline = ('\n' | '\r' '\n')
+
+let atomStart = '`'
+let atomString = ['A'-'z' '-' 'A'-'ω' ]
+
+let natural = ['0' - '9']
+
+let spaceNewline = ( whitespace | newline )
+
+
+
+rule tokenStream = parse
+  | '(' { Parser.L_PAREN }
+  | ')' { Parser.R_PAREN }
+  | '+' { Parser.PLUS }
+  | atomStart atomString+ { Parser.ATOM ((lexme lexbuf).[1..]) }
+  | "car" spaceNewline+ { Parser.CAR }
+  | "cons" spaceNewline+ { Parser.CONS }
+  | "cdr" spaceNewline+ { Parser.CDR }
+  | "add1" spaceNewline+ { Parser.ADD1 }
+  | "Atom" { Parser.T_ATOM }
+  | "Nat" { Parser.T_NAT }
+  | "Pair" { Parser.T_PAIR }
+  | newline + { newline lexbuf; tokenStream lexbuf } 
+  | whitespace + { tokenStream lexbuf }
+  | ("zero" | '0') { Parser.ZERO }
+  | "claim" spaceNewline + { Parser.CLAIM }
+  | "define" spaceNewline + { Parser.DEFINE }
+  | (atomString | natural) + spaceNewline+ { Parser.NAME ((lexme lexbuf).Trim()) }
+  | eof { Parser.EOF }
+  | _ {raise (SyntaxError (sprintf "Invalid string provided:\n\t%s" (lexme lexbuf)))}
+
+
+
+
