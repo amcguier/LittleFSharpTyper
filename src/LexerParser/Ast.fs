@@ -9,7 +9,7 @@ type Type =
   | Pair of Type * Type
 
 type Statement =
-  | Zero
+  | Nat of uint32
   | Atom of string
   | Cons of Statement * Statement
   | Car of Statement

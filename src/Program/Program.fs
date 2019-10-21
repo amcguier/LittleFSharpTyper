@@ -5,15 +5,20 @@ open FSharp.Text.Lexing
 
 
 
+let printLex (lexbuff :  LexBuffer<char>)  =
+      while not lexbuff.IsPastEndOfStream  do
+        printf "%A " (Lexer.tokenStream lexbuff)
+      printfn ""
+      
 let testParser str =
   let lexbuf = LexBuffer<char>.FromString str
   try
-    
+    //printLex (LexBuffer<char>.FromString str)
     Parser.start Lexer.tokenStream lexbuf |> Result.Ok
   with
     | Lexer.SyntaxError(s) -> sprintf "Syntax error %s" s |> Result.Error
     | exn  -> //(sprintf "%A %A" (exn.GetType()) exn)
-              Lexer.tokenStream lexbuf
+              Lexer.tokenStream lexbuf              
               |> sprintf "Parser Error \n\t%A"
               |> Result.Error
 

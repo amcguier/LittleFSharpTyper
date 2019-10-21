@@ -19,7 +19,8 @@ let whitespace = [' ' '\t']
 let newline = ('\n' | '\r' '\n')
 
 let atomStart = '`'
-let atomString = ['A'-'z' '-' 'A'-'ω' ]
+
+let atomString = ['a'-'z' '-' 'A'-'Z' ]
 
 let natural = ['0' - '9']
 
@@ -28,6 +29,7 @@ let spaceNewline = ( whitespace | newline )
 
 
 rule tokenStream = parse
+  //| atomString {Parser.ATOM (lexme lexbuf)}
   | '(' { Parser.L_PAREN }
   | ')' { Parser.R_PAREN }
   | '+' { Parser.PLUS }
@@ -41,10 +43,11 @@ rule tokenStream = parse
   | "Pair" { Parser.T_PAIR }
   | newline + { newline lexbuf; tokenStream lexbuf } 
   | whitespace + { tokenStream lexbuf }
-  | ("zero" | '0') { Parser.ZERO }
+  | ("zero") { Parser.ZERO }
+  | natural + { Parser.NAT (UInt32.Parse(lexme lexbuf))}
   | "claim" spaceNewline + { Parser.CLAIM }
   | "define" spaceNewline + { Parser.DEFINE }
-  | (atomString | natural) + spaceNewline+ { Parser.NAME ((lexme lexbuf).Trim()) }
+  | (atomString) (atomString | natural)+ spaceNewline+ { Parser.NAME ((lexme lexbuf).Trim()) }
   | eof { Parser.EOF }
   | _ {raise (SyntaxError (sprintf "Invalid string provided:\n\t%s" (lexme lexbuf)))}
 

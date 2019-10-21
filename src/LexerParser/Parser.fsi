@@ -15,6 +15,7 @@ type token =
   | CLAIM
   | ZERO
   | DEFINE
+  | NAT of (uint32)
   | ATOM of (string)
   | NAME of (string)
 type tokenId = 
@@ -32,6 +33,7 @@ type tokenId =
     | TOKEN_CLAIM
     | TOKEN_ZERO
     | TOKEN_DEFINE
+    | TOKEN_NAT
     | TOKEN_ATOM
     | TOKEN_NAME
     | TOKEN_end_of_input
