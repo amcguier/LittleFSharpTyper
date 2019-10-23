@@ -9,6 +9,7 @@ type Type =
   | Pair of Type * Type
 
 type Statement =
+  | Lambda of string List * Statement list
   | Nat of uint32
   | Atom of string
   | Cons of Statement * Statement

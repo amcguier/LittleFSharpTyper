@@ -6,9 +6,10 @@ open FSharp.Text.Lexing
 
 
 let printLex (lexbuff :  LexBuffer<char>)  =
+      printfn "\n"
       while not lexbuff.IsPastEndOfStream  do
         printf "%A " (Lexer.tokenStream lexbuff)
-      printfn ""
+      printfn "\n"
       
 let testParser str =
   let lexbuf = LexBuffer<char>.FromString str
@@ -23,10 +24,11 @@ let testParser str =
               |> Result.Error
 
 
-let programs =
+
+
+let validPrograms =
   [ "(cons `Atomy (`Atomx))"
     "(`WOot)"
-    "nonsense"
     "(19)"
     "(zero)"
     "(0)"
@@ -34,10 +36,15 @@ let programs =
     "(add1 zero)"
     "(`blah)"
     "(claim blah Nat)"
-    "(define fft `atoma)"]
+    "(define fft `atoma)"
+    "(lambda (x y z) (add1 5)\n(`atomicFire))"]
 
 
-
+let invalidPrograms =
+  [
+      "nonsense"
+  ]
+ 
 
 
 
@@ -45,7 +52,14 @@ let programs =
 
 [<EntryPoint>]
 let main argv =
-  programs
+  printfn "Valid programs \n\n"
+  validPrograms
   |> List.iter (fun (prog) -> printfn "Program:\n\t%s\n Produced:\n\t%A" prog (testParser prog))
+
+  printfn "\n\nInvalid Programs\n\n"
+
+  invalidPrograms
+  |> List.iter (fun (prog) -> printfn "Program:\n\t%s\n Produced:\n\t%A" prog (testParser prog))
+  
   0
   

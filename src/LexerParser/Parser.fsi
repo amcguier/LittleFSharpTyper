@@ -4,6 +4,7 @@ type token =
   | T_NAT
   | T_ATOM
   | T_PAIR
+  | LAMBDA
   | EOF
   | L_PAREN
   | R_PAREN
@@ -22,6 +23,7 @@ type tokenId =
     | TOKEN_T_NAT
     | TOKEN_T_ATOM
     | TOKEN_T_PAIR
+    | TOKEN_LAMBDA
     | TOKEN_EOF
     | TOKEN_L_PAREN
     | TOKEN_R_PAREN
@@ -44,6 +46,8 @@ type nonTerminalId =
     | NONTERM_typ
     | NONTERM_value
     | NONTERM_both
+    | NONTERM_name_fields
+    | NONTERM_statement_list
     | NONTERM_stmntbody
     | NONTERM_stmnt
     | NONTERM_prog

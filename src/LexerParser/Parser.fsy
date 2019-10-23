@@ -7,7 +7,7 @@
 %token <string> ATOM
 %token <uint32> NAT
 %token EOF L_PAREN R_PAREN CONS CAR CDR PLUS ADD1 CLAIM ZERO DEFINE
-%token T_NAT T_ATOM T_PAIR
+%token T_NAT T_ATOM T_PAIR LAMBDA
 %type <AST.Prog> start 
 %%
 
@@ -26,13 +26,25 @@ value:
   | ZERO { Nat(0u) }
   | NAT { Nat($1) }
 
+
 both:
   | stmnt { $1 }
   | value { $1 }
 
+name_fields:
+  | { [] }
+  | NAME { [$1] }
+  | name_fields NAME { $2 :: $1 }
+
+
+statement_list:
+  | both { [$1] }
+  | statement_list both { $2 :: $1 }
+      
 
 stmntbody:
   | value {$1}
+  | LAMBDA L_PAREN name_fields R_PAREN statement_list { Lambda(List.rev $3, List.rev $5) }
   | CONS both both { Cons($2, $3) }
   | CAR both  { Car($2) }
   | CDR both  { Cdr($2) }

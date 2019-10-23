@@ -34,6 +34,7 @@ rule tokenStream = parse
   | ')' { Parser.R_PAREN }
   | '+' { Parser.PLUS }
   | atomStart atomString+ { Parser.ATOM ((lexme lexbuf).[1..]) }
+  | "lambda" spaceNewline+ { Parser.LAMBDA }
   | "car" spaceNewline+ { Parser.CAR }
   | "cons" spaceNewline+ { Parser.CONS }
   | "cdr" spaceNewline+ { Parser.CDR }
@@ -47,7 +48,7 @@ rule tokenStream = parse
   | natural + { Parser.NAT (UInt32.Parse(lexme lexbuf))}
   | "claim" spaceNewline + { Parser.CLAIM }
   | "define" spaceNewline + { Parser.DEFINE }
-  | (atomString) (atomString | natural)+ spaceNewline+ { Parser.NAME ((lexme lexbuf).Trim()) }
+  | (atomString) (atomString | natural)* { Parser.NAME ((lexme lexbuf).Trim()) }
   | eof { Parser.EOF }
   | _ {raise (SyntaxError (sprintf "Invalid string provided:\n\t%s" (lexme lexbuf)))}
 
