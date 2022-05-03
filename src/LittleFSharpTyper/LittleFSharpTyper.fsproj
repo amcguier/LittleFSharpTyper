@@ -19,5 +19,8 @@
     <None Include="App.config" />
     <Compile Include="Main.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ParserLibrary\ParserLibrary.fsproj" />
+  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
