@@ -14,7 +14,7 @@ let printLex (lexbuff :  LexBuffer<char>)  =
 let testParser str =
   let lexbuf = LexBuffer<char>.FromString str
   try
-    //printLex (LexBuffer<char>.FromString str)
+    printLex (LexBuffer<char>.FromString str)
     Parser.start Lexer.tokenStream lexbuf |> Result.Ok
   with
     | Lexer.SyntaxError(s) -> sprintf "Syntax error %s" s |> Result.Error
@@ -43,6 +43,7 @@ let validPrograms =
 let invalidPrograms =
   [
       "nonsense"
+      ")("
   ]
  
 

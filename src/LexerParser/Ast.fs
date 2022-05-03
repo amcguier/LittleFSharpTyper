@@ -8,6 +8,7 @@ type Type =
   | Atom
   | Pair of Type * Type
 
+
 type Statement =
   | Lambda of string List * Statement list
   | Nat of uint32
