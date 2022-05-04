@@ -9,6 +9,7 @@ nuget YoloDev.Expecto.TestSdk
 nuget Microsoft.NET.Test.Sdk preview
 nuget altcover ~> 8.2.825
 nuget Packaging.Targets 0.1.208
+nuget FsToolkit.ErrorHandling
 
 // [ FAKE GROUP ]
 group Build

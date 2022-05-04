@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="Grammer.fs"/>
     <Compile Include="Parser.fs"/>
+    <Compile Include="TypeCheck.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
